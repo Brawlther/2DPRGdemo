@@ -24,9 +24,9 @@ public class AttriController : MonoBehaviour
     void Start()
     {
         // Start coroutines to fill bars
-        UpdateHpBarValueUI((float)knight.GetHp() / knight.GetMaxHp());
-        UpdateMpBarValueUI((float)knight.GetMp() / knight.GetMaxMp());
-        UpdateStaminaBarValueUI((float)knight.GetStamina() / knight.GetMaxStamina());
+        UpdateHpBarValueUI((float)knight.Hp / knight.MaxHp);
+        UpdateMpBarValueUI((float)knight.Mp / knight.MaxMp);
+        UpdateStaminaBarValueUI((float)knight.Stamina / knight.MaxStamina);
     }
 
     public void UpdateHpBarValueUI(float targetValue)

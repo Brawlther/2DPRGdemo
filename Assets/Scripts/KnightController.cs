@@ -79,7 +79,7 @@ public class KnightController : MonoBehaviour
     {
         if (currentState == KnightState.Dash) return;
         
-        velocity.Set(movement.x * knight.GetSpeed(), rb2d.linearVelocity.y);
+        velocity.Set(movement.x * knight.Speed, rb2d.linearVelocity.y);
         rb2d.linearVelocity = velocity;
     }
 
@@ -198,7 +198,7 @@ public class KnightController : MonoBehaviour
     void TryJump(){
         if (IsGrounded())
         {
-            rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x, knight.GetJumpForce());
+            rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x, knight.JumpForce);
             SwitchState(KnightState.Jump);
         }
     }
@@ -216,7 +216,7 @@ public class KnightController : MonoBehaviour
 
     void TryDash(){
         int consumption = knight.GetStaminaConsumptionDash();
-        if(knight.GetStamina() >= consumption){
+        if(knight.Stamina >= consumption){
             knight.UpdateStamina(-consumption);
             StartDash();
         }
@@ -227,13 +227,7 @@ public class KnightController : MonoBehaviour
         dashCoroutine = StartCoroutine(OnDashingEnd());
         SwitchState(KnightState.Dash);
 
-        // Shrink collider
-        cc2d.size = new Vector2(colliderSize.x, colliderSize.y / 2f);
-        cc2d.offset = new Vector2(colliderOffset.x, colliderOffset.y - colliderSize.y / 4f);
-
-        // Apply fast movement
-        float direction = sr.flipX ? -1f : 1f;
-        rb2d.linearVelocity = new Vector2(direction * knight.GetDashSpeed(), 0);
+        knight.Cast(new Dash());
     }
 
     void StartCast(){
@@ -295,7 +289,7 @@ public class KnightController : MonoBehaviour
     public void OnCastAnimationEnd()
     {
         int consumption = knight.GetMpConsumptionFireball();
-        if(knight.GetMp() >= consumption){
+        if(knight.Mp >= consumption){
             knight.UpdateMp(-consumption);
             ShootFireball();
         }

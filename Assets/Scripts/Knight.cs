@@ -1,19 +1,12 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Knight : MonoSingleton<Knight>
+public class Knight : EntityCharacter
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private float _jumpForce;
-    [SerializeField] private float _dashSpeed;
+    /* TO BE REMOVED */
     [SerializeField] private GameObject attriNode;
     private AttriController ac;
-    private int _maxHp;
-    private int _hp;
-    private int _maxMp;
-    private int _mp;
-    private int _maxStamina;
-    private int _stamina;
+    /* TO BE REMOVED */
+
     private int _staminaConsumptionDash;
     private int _mpConsumptionFireball;
 
@@ -25,70 +18,42 @@ public class Knight : MonoSingleton<Knight>
         return _mpConsumptionFireball;
     }
 
-    public float GetSpeed(){
-        return _speed;
+    public override void UpdateHp(int change){
+        base.UpdateHp(change);
+        ac.UpdateMpBarValueUI((float)Hp / MaxHp);
     }
 
-    public float GetJumpForce(){
-        return _jumpForce;
+    public override void UpdateMp(int change){
+        base.UpdateMp(change);
+        ac.UpdateMpBarValueUI((float)Mp / MaxMp);
     }
 
-    public float GetDashSpeed(){
-        return _dashSpeed;
+
+    public override void UpdateStamina(int change){
+        base.UpdateStamina(change);
+        ac.UpdateStaminaBarValueUI((float)Stamina / MaxStamina);
     }
 
-    public int GetMaxHp(){
-        return _maxHp;
-    }
-
-    public int GetMaxMp(){
-        return _maxMp;
-    }
-
-    public int GetMaxStamina(){
-        return _maxStamina;
-    }
-
-    public int GetHp(){
-        return _hp;
-    }
-
-    public void UpdateHp(int change){
-        _hp += change;
-    }
-
-    public int GetMp(){
-        return _mp;
-    }
-
-    public void UpdateMp(int change){
-        _mp += change;
-        ac.UpdateMpBarValueUI((float)_mp / _maxMp);
-    }
-
-    public int GetStamina(){
-        return _stamina;
-    }
-
-    public void UpdateStamina(int change){
-        _stamina += change;
-        ac.UpdateStaminaBarValueUI((float)_stamina / _maxStamina);
-    }
-
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         ac = attriNode.GetComponent<AttriController>();
-        _maxHp = 100;
-        _maxMp = 100;
-        _maxStamina = 30;
-        _speed = 3f;
-        _dashSpeed = 9f;
-        _jumpForce = 10f;
+
+        UpdateMaxHp(100);
+        UpdateMaxMp(100);
+        UpdateMaxStamina(30);
+        UpdateSpeed(3);
+        UpdateDashSpeed(9);
+        UpdateJumpForce(10);
+        UpdateHp(MaxHp);
+        UpdateMp(MaxMp);
+        UpdateStamina(MaxStamina);
+
+        CapsuleCollider2D collider = GetComponent<CapsuleCollider2D>();
+        OriginalColliderSize = collider.size;
+        OriginalColliderOffset = collider.offset;
+
+        //to be removed
         _staminaConsumptionDash = 10;
         _mpConsumptionFireball = 50;
-        UpdateHp(_maxHp);
-        UpdateMp(_maxMp);
-        UpdateStamina(_maxStamina);
     }
 }
