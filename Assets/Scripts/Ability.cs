@@ -1,18 +1,18 @@
 public abstract class Ability
 {
-    private string _abilityName;
+    protected string abilityName;
     public string AbilityName {
-        get => _abilityName;
-        set => _abilityName = value;
+        get => abilityName;
+        set => abilityName = value;
     }
-    private int _consumption;
+    protected int consumption;
     public int Consumption {
-        get => _consumption;
-        set => _consumption = value;
+        get => consumption;
+        set => consumption = value;
     }
 
     public void Launch(EntityCharacter caster){
-        if (HasSufficientResource(caster)) {
+        if (CanCast(caster)) {
             ConsumeResource(caster);
             Activate(caster);
         } else {
@@ -21,7 +21,7 @@ public abstract class Ability
     }
     //WIP
     protected void ShowInsufficientResourdceAlert() { }
-    protected abstract bool HasSufficientResource(EntityCharacter caster);
+    public abstract bool CanCast(EntityCharacter caster);
     protected abstract void ConsumeResource(EntityCharacter caster);
     protected abstract void Activate(EntityCharacter caster);
 }

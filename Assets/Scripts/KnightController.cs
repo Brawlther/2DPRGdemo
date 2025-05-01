@@ -19,8 +19,6 @@ public class KnightController : MonoBehaviour
     private KnightState currentState = KnightState.Idle;
     private bool blockRequested;
     private float dizzleTime;
-    [SerializeField] private Transform fireballSpawnPoint;
-    [SerializeField] private Transform dashEffectSpawnPoint;
     private Coroutine dizzledCoroutine;
     private Coroutine dashCoroutine;
     public KnightState GetCurrentState(){
@@ -98,7 +96,7 @@ public class KnightController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W)) TryJump();
         else if (Input.GetKeyDown(KeyCode.J)) StartAttack();
         else if (Input.GetKeyDown(KeyCode.Space)) StartBlock();
-        else if (Input.GetKeyDown(KeyCode.K)) TryDash();
+        else if (Input.GetKeyDown(KeyCode.K)) StartDash();
         else if (Input.GetKeyDown(KeyCode.L)) StartCast();
         else CheckMovement();
     }
@@ -115,7 +113,7 @@ public class KnightController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W)) TryJump();
         else if (Input.GetKeyDown(KeyCode.J)) StartAttack();
         else if (Input.GetKeyDown(KeyCode.Space)) StartBlock();
-        else if (Input.GetKeyDown(KeyCode.K)) TryDash();
+        else if (Input.GetKeyDown(KeyCode.K)) StartDash();
     }
 
     void HandleJumping()
@@ -170,8 +168,8 @@ public class KnightController : MonoBehaviour
             sr.flipX = isMovingLeft;
 
             // Flip the spawn points correctly
-            Vector3 spawnLocalPos = fireballSpawnPoint.localPosition;
-            Vector3 dashLocalPos = dashEffectSpawnPoint.localPosition;
+            Vector3 spawnLocalPos = knight.FireballSpawnPoint.localPosition;
+            Vector3 dashLocalPos = knight.DashEffectSpawnPoint.localPosition;
             Vector3 swordLocalPos = swordObj.transform.localPosition;
 
             float sign = isMovingLeft ? -1f : 1f;
@@ -181,8 +179,8 @@ public class KnightController : MonoBehaviour
             swordLocalPos.x = Mathf.Abs(swordLocalPos.x) * sign;
             
 
-            fireballSpawnPoint.localPosition = spawnLocalPos;
-            dashEffectSpawnPoint.localPosition = dashLocalPos;
+            knight.FireballSpawnPoint.localPosition = spawnLocalPos;
+            knight.DashEffectSpawnPoint.localPosition = dashLocalPos;
             swordObj.transform.localPosition = swordLocalPos;
 
             if (currentState == KnightState.Idle)
@@ -214,20 +212,15 @@ public class KnightController : MonoBehaviour
         SwitchState(KnightState.Block);
     }
 
-    void TryDash(){
-        int consumption = knight.GetStaminaConsumptionDash();
-        if(knight.Stamina >= consumption){
-            knight.UpdateStamina(-consumption);
-            StartDash();
-        }
-    }
     void StartDash(){
-        if (dashCoroutine != null)
-            StopCoroutine(dashCoroutine);
-        dashCoroutine = StartCoroutine(OnDashingEnd());
-        SwitchState(KnightState.Dash);
-
-        knight.Cast(new Dash());
+        Dash ability = new(10);
+        if(ability.CanCast(knight)){
+            if (dashCoroutine != null)
+                StopCoroutine(dashCoroutine);
+            dashCoroutine = StartCoroutine(OnDashingEnd());
+            SwitchState(KnightState.Dash);
+            knight.Cast(ability);
+        }
     }
 
     void StartCast(){
@@ -268,8 +261,8 @@ public class KnightController : MonoBehaviour
     }
 
     public void PlayDashEffect(){
-        Vector3 spawnPos = dashEffectSpawnPoint.position;
-        if (dashEffectSpawnPoint != null){
+        if (knight.DashEffectSpawnPoint != null){
+            Vector3 spawnPos = knight.DashEffectSpawnPoint.position;
             GameObject dashEffect = Instantiate(PrefabsManager.Instance.GetPrefabByName("dasheffect"), spawnPos, Quaternion.identity);
             dashEffect.GetComponent<SpriteRenderer>().flipX = sr.flipX;
         }
@@ -288,11 +281,7 @@ public class KnightController : MonoBehaviour
 
     public void OnCastAnimationEnd()
     {
-        int consumption = knight.GetMpConsumptionFireball();
-        if(knight.Mp >= consumption){
-            knight.UpdateMp(-consumption);
-            ShootFireball();
-        }
+        ShootFireball();
         if (currentState == KnightState.Cast)
         {
             SwitchState(KnightState.Idle);
@@ -360,13 +349,9 @@ public class KnightController : MonoBehaviour
 
     void ShootFireball()
     {
-        Vector3 spawnPos = fireballSpawnPoint.position;
-        if (fireballSpawnPoint != null){
-            GameObject fireball = Instantiate(PrefabsManager.Instance.GetPrefabByName("fireball"), spawnPos, Quaternion.identity);
-            fireball.tag = "PlayerStunningSpell";
-            fireball.GetComponent<SpriteRenderer>().flipX = sr.flipX;
-            Vector2 direction = sr.flipX ? Vector2.left : Vector2.right;
-            fireball.GetComponent<Fireball>().SetDirection(direction);
+        FireballAbility ability = new(50);
+        if(ability.CanCast(knight)){
+            knight.Cast(ability);
         }
     }
 

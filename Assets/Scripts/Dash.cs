@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Dash : StaminaAbility
 {
+    public Dash(int consumption){
+        abilityName = "Dash";
+        this.consumption = consumption;
+    }
     protected override void Activate(EntityCharacter caster)
     {
         CapsuleCollider2D collider = caster.GetComponent<CapsuleCollider2D>();

@@ -2723,6 +2723,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &1035024465 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 544150033699306926, guid: ce23935fcc1fef941bec2bd2038f8903, type: 3}
+  m_PrefabInstance: {fileID: 5412602765093735288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1097279640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2843,6 +2848,11 @@ Transform:
   - {fileID: 376421992}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1113364250 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2459668733849641673, guid: ce23935fcc1fef941bec2bd2038f8903, type: 3}
+  m_PrefabInstance: {fileID: 5412602765093735288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1116524882
 GameObject:
   m_ObjectHideFlags: 0
@@ -5658,6 +5668,14 @@ PrefabInstance:
       propertyPath: attriNode
       value: 
       objectReference: {fileID: 786663711}
+    - target: {fileID: 5823738717299199507, guid: ce23935fcc1fef941bec2bd2038f8903, type: 3}
+      propertyPath: _fireballSpawnPoint
+      value: 
+      objectReference: {fileID: 1035024465}
+    - target: {fileID: 5823738717299199507, guid: ce23935fcc1fef941bec2bd2038f8903, type: 3}
+      propertyPath: _dashEffectSpawnPoint
+      value: 
+      objectReference: {fileID: 1113364250}
     - target: {fileID: 6876839092689316888, guid: ce23935fcc1fef941bec2bd2038f8903, type: 3}
       propertyPath: m_Name
       value: Knight

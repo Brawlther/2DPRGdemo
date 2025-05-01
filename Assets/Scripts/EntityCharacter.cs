@@ -83,10 +83,22 @@ public abstract class EntityCharacter : Character
         get => _originalColliderOffset;
         set => _originalColliderOffset = value;
     }
-
+    [SerializeField]private Transform _fireballSpawnPoint;
+    public Transform FireballSpawnPoint {
+        get => _fireballSpawnPoint;
+        set => FireballSpawnPoint = value;
+    }
+    [SerializeField] private Transform _dashEffectSpawnPoint;
+    public Transform DashEffectSpawnPoint {
+        get => _dashEffectSpawnPoint;
+        set => _dashEffectSpawnPoint = value;
+    }
+    protected SpriteRenderer sr;
+    public bool IsHorizontallyFlipped {
+        get => sr.flipX;
+        set => sr.flipX = value; 
+    }
     public virtual void Cast(Ability ability){
         ability.Launch(this);
     }
-
-
 }

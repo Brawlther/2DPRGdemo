@@ -6,13 +6,7 @@ public class Knight : EntityCharacter
     [SerializeField] private GameObject attriNode;
     private AttriController ac;
     /* TO BE REMOVED */
-
-    private int _staminaConsumptionDash;
     private int _mpConsumptionFireball;
-
-    public int GetStaminaConsumptionDash(){
-        return _staminaConsumptionDash;
-    }
 
     public int GetMpConsumptionFireball(){
         return _mpConsumptionFireball;
@@ -52,8 +46,8 @@ public class Knight : EntityCharacter
         OriginalColliderSize = collider.size;
         OriginalColliderOffset = collider.offset;
 
+        sr = GetComponent<SpriteRenderer>();
         //to be removed
-        _staminaConsumptionDash = 10;
         _mpConsumptionFireball = 50;
     }
 }

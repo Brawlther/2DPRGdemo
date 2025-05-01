@@ -3,6 +3,10 @@ using UnityEngine;
 public class Fireball : MonoBehaviour
 {
     private float _speed;
+    public float Speed {
+        get => _speed;
+        set => _speed = value;
+    }
     private Vector2 _direction;
     private float knockbackForceHorizontal;
     private float knockbackForceVertical;
@@ -16,7 +20,6 @@ public class Fireball : MonoBehaviour
         cc = GetComponent<CapsuleCollider2D>();
         damageModule = GetComponent<Damage>();
         damageModule.SetAttackPoint(50);
-        _speed = 8f;
         knockbackForceHorizontal = 3f;
         knockbackForceVertical = 7f;
         spawnOffset = new Vector3(0.5f, 0.5f, 0f);
